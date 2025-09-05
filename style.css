@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f6f8fa;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #24292e;
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.tab-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #fff;
+    border-bottom: 1px solid #d1d5da;
+    padding: 0 1rem;
+    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.tab-button {
+    padding: 0.75rem 1.25rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: #586069;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.tab-button:hover {
+    color: #24292e;
+    background-color: #f6f8fa;
+}
+
+.tab-button.active {
+    color: #24292e;
+    border-bottom-color: #f9826c;
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    padding: 1rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.github-section,
+.npm-section {
+    margin-bottom: 2rem;
+}
+
+.github-section h2,
+.npm-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #f6f8fa;
+    border-left: 3px solid #0366d6;
+}
+
+.iframe-container,
+.npm-iframe-container {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: white;
+    position: relative;
+}
+
+.npm-iframe-container {
+    height: 800px;
+}
+
+.iframe-container iframe,
+.npm-iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.npm-link {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #0366d6;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 10;
+    transition: background-color 0.2s ease;
+}
+
+.npm-link:hover {
+    background-color: #0256c7;
+}
+
+.npm-info {
+    padding: 1rem;
+    background-color: #f6f8fa;
+    border-radius: 6px;
+    min-height: 100px;
+}
+
+.no-npm {
+    color: #586069;
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Loading state */
+.npm-info p {
+    color: #586069;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+    
+    header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .tab-button {
+        padding: 0.5rem 0.75rem;
+        font-size: 12px;
+    }
+    
+    .iframe-container {
+        height: 400px;
+    }
+    
+    .npm-iframe-container {
+        height: 500px;
+    }
+}
+
+/* Note about iframe limitations */
+.iframe-notice {
+    background-color: #fff3cd;
+    border-left: 3px solid #ffc107;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 4px;
+}
+
+.iframe-notice p {
+    color: #856404;
+    font-size: 14px;
+}
