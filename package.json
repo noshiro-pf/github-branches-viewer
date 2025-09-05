@@ -1,0 +1,47 @@
+{
+  "name": "github-branches-viewer",
+  "version": "0.0.0",
+  "private": false,
+  "author": "noshiro-pf <noshiro.pf@gmail.com>",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check": "npm run type-check && npm run lint",
+    "check-all": "tsx ./scripts/cmd/check-all.mjs",
+    "check:ext": "tsx ./scripts/cmd/check-ext.mjs",
+    "dev": "vite",
+    "fmt": "format-diff-from origin/main",
+    "fmt:full": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "tsc": "tsc --noEmit",
+    "tscw": "tsc --noEmit --watch -p ./tsconfig.json",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.27.16",
+    "@wooorm/starry-night": "^3.8.0",
+    "axios": "^1.11.0",
+    "github-markdown-css": "^5.8.1",
+    "hast-util-to-html": "^9.0.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.35.0",
+    "eslint-config-typed": "^1.2.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.2.0",
+    "prettier-plugin-packagejson": "^2.5.19",
+    "ts-repo-utils": "^7.2.0",
+    "ts-type-forge": "^2.2.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.2",
+    "vitest": "^3.2.4"
+  }
+}

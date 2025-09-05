@@ -1,65 +1,104 @@
-# GitHub Branches Viewer
+# GitHub Branches & README Viewer
 
-A static website to view GitHub branches and NPM package information for multiple repositories in a single page with tabbed navigation.
+A React-based web application that displays GitHub repository branches, pull requests, CI status, and README files in a clean, tabbed interface. Built with modern web technologies including React 19, TypeScript, and Vite.
 
 ## Features
 
-- Tabbed navigation for easy switching between repositories
-- Embedded GitHub branches view for each repository
-- NPM package information display
-- Responsive design
-- Static site - can be hosted on GitHub Pages, Netlify, Vercel, etc.
+- **Multi-Repository Support**: View multiple GitHub repositories in a tabbed interface
+- **Branch Information**: Display all branches with commit details, timestamps, and author information
+- **CI Status Integration**: Show GitHub Actions check status for each branch
+- **Pull Request Links**: Direct links to associated pull requests
+- **Branch Comparison**: Compare branches against the default branch with file change counts
+- **README Rendering**: Syntax-highlighted README files with GitHub-flavored markdown
+- **Dark/Light Mode**: Toggle between themes with system preference detection
+- **URL State Management**: Shareable URLs with tab and theme state
+- **Rate Limit Monitoring**: GitHub API rate limit status display
+- **Responsive Design**: Mobile-friendly interface
 
-## Repositories Included
+## Tech Stack
 
-1. typescript-monorepo-template
-2. typescript-template
-3. eslint-config-typed
-4. ts-repo-utils
-5. ts-type-forge
-6. ts-data-forge
-7. ts-fortress
-8. mono
+- **Frontend**: React 19 with TypeScript
+- **Build Tool**: Vite 7.x
+- **HTTP Client**: Axios
+- **Syntax Highlighting**: @wooorm/starry-night
+- **Styling**: CSS modules with custom properties for theming
+- **Testing**: Playwright for visual regression testing
+- **Code Quality**: ESLint, Prettier, TypeScript strict mode
 
-## Local Development
+## Setup
 
-Simply open `index.html` in a web browser, or use a local server:
+1. Clone the repository:
 
-```bash
-# Using Python 3
-python3 -m http.server 8000
+    ```bash
+    git clone https://github.com/noshiro-pf/github-branches-viewer.git
+    cd github-branches-viewer
+    ```
 
-# Using Node.js (install http-server globally first: npm i -g http-server)
-http-server
+2. Install dependencies:
 
-# Using PHP
-php -S localhost:8000
+    ```bash
+    npm install
+    ```
+
+3. Create environment file:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+4. Configure GitHub API access in `.env`:
+
+    ```
+    # Optional: GitHub Personal Access Token for higher rate limits
+    VITE_GITHUB_TOKEN=your_github_token_here
+
+    # Optional: Additional repositories to display (comma-separated)
+    VITE_ADDITIONAL_REPOS=owner1/repo1,owner2/repo2
+    ```
+
+5. Start development server:
+    ```bash
+    npm run dev
+    ```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run check` - Run type checking and linting
+- `npm run lint` - Run ESLint
+- `npm run fmt` - Format code with Prettier
+- `npm run test:visual` - Run Playwright visual tests
+- `npm run tsc` - Type check without emitting
+
+## Configuration
+
+### Adding Repositories
+
+Repositories can be added by modifying the `buildRepositoriesList` function in `src/App.tsx` or by setting the `VITE_ADDITIONAL_REPOS` environment variable.
+
+### GitHub API Token
+
+While the app works without authentication, providing a GitHub token increases the API rate limit from 60 to 5000 requests per hour.
+
+## Project Structure
+
 ```
-
-## Deployment
-
-This is a static site that can be deployed to:
-
-### GitHub Pages
-1. Push this repository to GitHub
-2. Go to Settings � Pages
-3. Select source branch and folder
-4. Your site will be available at `https://[username].github.io/[repository-name]/`
-
-### Netlify
-1. Push to GitHub
-2. Connect repository to Netlify
-3. Deploy with default settings
-
-### Vercel
-1. Push to GitHub
-2. Import project in Vercel
-3. Deploy with default settings
-
-## Note about iframe limitations
-
-Some features of GitHub pages may not work perfectly within iframes due to security restrictions. For full functionality, clicking the links to open in new tabs is recommended.
+src/
+├── components/          # React components
+│   ├── GitHubBranches.tsx      # Main branch listing component
+│   ├── RepositoryViewer.tsx    # Repository container component
+│   ├── ReadmeSectionBody.tsx   # README renderer
+│   ├── CheckStatus.tsx         # CI status display
+│   ├── RateLimitStatus.tsx     # API rate limit monitor
+│   └── LoadingSkeleton.tsx     # Loading placeholders
+├── types/               # TypeScript type definitions
+├── utils/               # API utilities and helpers
+├── styles/              # Global styles and themes
+└── App.tsx              # Main application component
+```
 
 ## License
 
-MIT
+This project is open source and available under the MIT License.
