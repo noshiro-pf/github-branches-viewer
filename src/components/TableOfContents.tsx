@@ -1,5 +1,13 @@
 import { memo, useCallback, useEffect, useState } from 'react';
-import './TableOfContents.css';
+import {
+  TableOfContentsNav,
+  TocHeader,
+  TocList,
+  TocItem,
+  TocLink,
+  TocIcon,
+  TocLabel,
+} from './TableOfContents.styles';
 
 type TOCItem = {
   id: string;
@@ -56,7 +64,7 @@ const TableOfContents = memo(() => {
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
-        if (section !== null && section.offsetTop <= scrollPosition) {
+        if (section !== null && section !== undefined && section.offsetTop <= scrollPosition) {
           const tocItem = tocItems[i];
           if (tocItem) {
             setActiveSection(tocItem.id);
@@ -73,30 +81,30 @@ const TableOfContents = memo(() => {
   }, []);
 
   return (
-    <nav className={"table-of-contents"}>
-      <div className={"toc-header"}>
+    <TableOfContentsNav>
+      <TocHeader>
         <svg fill={"currentColor"} height={"16"} viewBox={"0 0 16 16"} width={"16"}>
           <path d={"M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM2 9a1 1 0 100-2 1 1 0 000 2zm0 5a1 1 0 100-2 1 1 0 000 2z"} />
         </svg>
         <span>{"Contents"}</span>
-      </div>
+      </TocHeader>
 
-      <ul className={"toc-list"}>
+      <TocList>
         {tocItems.map((item) => (
-          <li key={item.id} className={"toc-item"}>
-            <button
-              className={`toc-link ${activeSection === item.id ? 'active' : ''}`}
+          <TocItem key={item.id}>
+            <TocLink
+              $active={activeSection === item.id}
               onClick={() => { scrollToSection(item.id); }}
               title={`Go to ${item.label}`}
               type={"button"}
             >
-              <span className={"toc-icon"}>{item.icon}</span>
-              <span className={"toc-label"}>{item.label}</span>
-            </button>
-          </li>
+              <TocIcon>{item.icon}</TocIcon>
+              <TocLabel>{item.label}</TocLabel>
+            </TocLink>
+          </TocItem>
         ))}
-      </ul>
-    </nav>
+      </TocList>
+    </TableOfContentsNav>
   );
 });
 

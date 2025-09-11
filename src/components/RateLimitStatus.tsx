@@ -1,7 +1,17 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { type RateLimit } from '../types';
 import { checkRateLimit } from '../utils/api';
-import './RateLimitStatus.css';
+import {
+  RateLimitStatusContainer,
+  RateLimitToggle,
+  RateIndicator,
+  RateLimitDetails,
+  RateInfo,
+  RateBar,
+  RateBarFill,
+  ResetTime,
+  RateWarning,
+} from './RateLimitStatus.styles';
 
 const RateLimitStatus = memo(() => {
   const [rateLimit, setRateLimit] = useState<RateLimit | null>(null);
@@ -44,54 +54,48 @@ const RateLimitStatus = memo(() => {
   const percentage = (rateLimit.remaining / rateLimit.limit) * 100;
 
   return (
-    <div className={'rate-limit-status'}>
-      <button
+    <RateLimitStatusContainer>
+      <RateLimitToggle
         type={'button'}
-        className={'rate-limit-toggle'}
         title={'GitHub API Rate Limit'}
         onClick={toggleDetails}
       >
-        <span
-          className={`rate-indicator ${percentage < 20 ? 'low' : 'normal'}`}
-        >
+        <RateIndicator $isLow={percentage < 20}>
           {rateLimit.remaining}
           {'/'}
           {rateLimit.limit}
-        </span>
-      </button>
+        </RateIndicator>
+      </RateLimitToggle>
 
       {showDetails ? (
-        <div className={'rate-limit-details'}>
+        <RateLimitDetails>
           <h3>{'GitHub API Rate Limit'}</h3>
-          <div className={'rate-info'}>
-            <div className={'rate-bar'}>
-              <div
-                className={'rate-bar-fill'}
-                style={{ width: `${percentage}%` }}
-              />
-            </div>
+          <RateInfo>
+            <RateBar>
+              <RateBarFill $width={percentage} />
+            </RateBar>
             <p>
               <strong>{rateLimit.remaining}</strong>
               {' of'} <strong>{rateLimit.limit}</strong> {'requests remaining'}
             </p>
-            <p className={'reset-time'}>
+            <ResetTime>
               {'Resets at '}
               {resetTime.toLocaleTimeString()}
-            </p>
+            </ResetTime>
             {percentage < 20 ? (
-              <div className={'rate-warning'}>
+              <RateWarning>
                 {
                   '⚠️ Rate limit is low. Consider adding a GitHub token to increase'
                 }
                 {'limits.'}
                 <br />
                 <small>{'See .env.example for instructions'}</small>
-              </div>
+              </RateWarning>
             ) : null}
-          </div>
-        </div>
+          </RateInfo>
+        </RateLimitDetails>
       ) : null}
-    </div>
+    </RateLimitStatusContainer>
   );
 });
 

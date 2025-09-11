@@ -11,22 +11,21 @@ import {
 } from '@floating-ui/react';
 import { memo, useCallback, useState } from 'react';
 import { type GitHubCheckRun } from '../types';
-import './CheckStatus.css';
 
-type CheckStatusProps = Readonly<{
-  checks?: {
+type Props = Readonly<{
+  checks?: Readonly<{
     total: number;
     passing: number;
     failing: number;
     pending: number;
     successful?: number;
     failed?: number;
-    runs: GitHubCheckRun[];
-  };
+    runs: readonly GitHubCheckRun[];
+  }>;
   checkStatus?: string;
 }>;
 
-const CheckStatus = memo(({ checks, checkStatus }: CheckStatusProps) => {
+const CheckStatus = memo<Props>(({ checks, checkStatus }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { refs, floatingStyles, context } = useFloating({

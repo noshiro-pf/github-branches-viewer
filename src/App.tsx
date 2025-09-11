@@ -1,9 +1,23 @@
 import { memo, useCallback, useEffect, useState } from 'react';
-import './App.css';
 import RateLimitStatus from './components/RateLimitStatus';
 import RepositoryViewer from './components/RepositoryViewer';
 import TableOfContents from './components/TableOfContents';
 import { type Repository } from './types';
+import { GlobalStyles } from './styles/GlobalStyles';
+import {
+  AppContainer,
+  AppHeader,
+  HeaderControls,
+  ToggleButton,
+  TabNavigation,
+  TabButton,
+  MainContent,
+  TabContent,
+  AppBodyVertical,
+  SidebarNavigation,
+  SidebarTab,
+  MainContentVertical,
+} from './App.styles';
 
 // Parse additional repositories from environment variables
 const parseAdditionalRepos = (): Repository[] => {
@@ -14,16 +28,16 @@ const parseAdditionalRepos = (): Repository[] => {
   if (additionalReposEnv) {
     return additionalReposEnv
       .split(',')
-      .map((s) => s.trim())
+      .map((s: string) => s.trim())
       .filter(Boolean)
-      .map((repoString) => {
+      .map((repoString: string) => {
         const [owner, repoName] = repoString.split('/');
         return { owner, repoName };
       })
       .filter(
-        ({ owner, repoName }) => owner !== undefined && repoName !== undefined,
+        ({ owner, repoName }: { owner: string | undefined; repoName: string | undefined }) => owner !== undefined && repoName !== undefined,
       )
-      .map(({ owner, repoName }) => ({
+      .map(({ owner, repoName }: { owner: string; repoName: string }) => ({
         id: `${owner}-${repoName}`,
         name: repoName,
         owner: owner.trim(),
@@ -98,7 +112,7 @@ const getInitialTab = (): string => {
   const params = new URLSearchParams(globalThis.location.search);
   const tabFromUrl = params.get('tab');
   const validTab = repositories.find((repo) => repo.id === tabFromUrl);
-  return validTab !== undefined
+  return validTab !== undefined && tabFromUrl !== null
     ? tabFromUrl
     : (repositories[0]?.id ?? 'github-branches-viewer');
 };
@@ -177,7 +191,7 @@ export const App = memo(() => {
       // Handle tab parameter
       const tabFromUrl = params.get('tab');
       const validTab = repositories.find((repo) => repo.id === tabFromUrl);
-      if (validTab) {
+      if (validTab && tabFromUrl !== null) {
         setActiveTab(tabFromUrl);
       } else {
         setActiveTab(repositories[0]?.id ?? 'github-branches-viewer');
@@ -199,17 +213,18 @@ export const App = memo(() => {
   }, []);
 
   return (
-    <div className={`app ${darkMode ? 'dark' : ''}`}>
-      <header className={'app-header'}>
-        <h1>{'GitHub Branches & README Viewer'}</h1>
-        <div className={'header-controls'}>
-          <button
+    <>
+      <GlobalStyles />
+      <AppContainer className={darkMode ? 'dark' : ''}>
+        <AppHeader>
+          <h1>{'GitHub Branches & README Viewer'}</h1>
+          <HeaderControls>
+            <ToggleButton
             aria-label={
               verticalLayout
                 ? 'Switch to horizontal layout'
                 : 'Switch to vertical layout'
             }
-            className={'layout-toggle'}
             title={
               verticalLayout
                 ? 'Switch to horizontal layout'
@@ -247,12 +262,11 @@ export const App = memo(() => {
                 />
               </svg>
             )}
-          </button>
-          <button
+          </ToggleButton>
+          <ToggleButton
             aria-label={
               darkMode ? 'Switch to light mode' : 'Switch to dark mode'
             }
-            className={'dark-mode-toggle'}
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             type="button"
             onClick={toggleDarkMode}
@@ -284,17 +298,17 @@ export const App = memo(() => {
                 />
               </svg>
             )}
-          </button>
-        </div>
-      </header>
+          </ToggleButton>
+        </HeaderControls>
+      </AppHeader>
 
       {verticalLayout ? (
-        <div className={'app-body vertical-layout'}>
-          <nav className={'sidebar-navigation'}>
+        <AppBodyVertical>
+          <SidebarNavigation>
             {repositories.map((repo) => (
-              <a
+              <SidebarTab
                 key={repo.id}
-                className={`sidebar-tab ${activeTab === repo.id ? 'active' : ''}`}
+                $active={activeTab === repo.id}
                 href={`?tab=${repo.id}`}
                 title={repo.name}
                 onClick={(e) => {
@@ -305,29 +319,29 @@ export const App = memo(() => {
                 }}
               >
                 <span className={'sidebar-tab-text'}>{repo.name}</span>
-              </a>
+              </SidebarTab>
             ))}
-          </nav>
+          </SidebarNavigation>
 
-          <main className={'main-content'}>
-            <div className={'tab-content active'}>
+          <MainContentVertical>
+            <TabContent>
               <RepositoryViewer
                 key={activeTab}
                 repository={
                   repositories.find((repo) => repo.id === activeTab) ??
-                  repositories[0]
+                  repositories[0]!
                 }
               />
-            </div>
-          </main>
-        </div>
+            </TabContent>
+          </MainContentVertical>
+        </AppBodyVertical>
       ) : (
         <>
-          <nav className={'tab-navigation'}>
+          <TabNavigation>
             {repositories.map((repo) => (
-              <a
+              <TabButton
                 key={repo.id}
-                className={`tab-button ${activeTab === repo.id ? 'active' : ''}`}
+                $active={activeTab === repo.id}
                 href={`?tab=${repo.id}`}
                 title={repo.name}
                 onClick={(e) => {
@@ -338,27 +352,28 @@ export const App = memo(() => {
                 }}
               >
                 <span className={'tab-button-text'}>{repo.name}</span>
-              </a>
+              </TabButton>
             ))}
-          </nav>
+          </TabNavigation>
 
-          <main className={'main-content'}>
-            <div className={'tab-content active'}>
+          <MainContent>
+            <TabContent>
               <RepositoryViewer
                 key={activeTab}
                 repository={
                   repositories.find((repo) => repo.id === activeTab) ??
-                  repositories[0]
+                  repositories[0]!
                 }
               />
-            </div>
-          </main>
+            </TabContent>
+          </MainContent>
         </>
       )}
 
       <TableOfContents />
       <RateLimitStatus />
-    </div>
+    </AppContainer>
+    </>
   );
 });
 
