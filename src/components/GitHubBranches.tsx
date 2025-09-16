@@ -22,16 +22,17 @@ import {
   fetchRepository,
 } from '../utils/api';
 import CheckStatus from './CheckStatus';
+import './GitHubBranches.css';
 import BranchesLoadingSkeleton from './LoadingSkeleton';
 
-type Props = Readonly<{
+type GitHubBranchesProps = Readonly<{
   repository: Repository;
   onRefresh?: () => void;
 }>
 
-const GitHubBranches = memo<Props>(
-  ({ repository, onRefresh }) => {
-    const [branches, setBranches] = useState<readonly BranchInfo[]>([]);
+const GitHubBranches = memo(
+  ({ repository, onRefresh }: GitHubBranchesProps) => {
+    const [branches, setBranches] = useState<BranchInfo[]>([]);
     const [defaultBranch, setDefaultBranch] = useState<string>('main');
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -490,12 +491,12 @@ const GitHubBranches = memo<Props>(
                     {branch.pullRequest !== null ? (
                       <a
                         className={"pr-link-inline"}
-                        href={branch.pullRequest!.html_url}
+                        href={branch.pullRequest.html_url}
                         rel={"noopener noreferrer"}
                         target={"_blank"}
-                        title={branch.pullRequest!.title}
+                        title={branch.pullRequest.title}
                       >
-                        {"#"}{branch.pullRequest!.number}
+                        {"#"}{branch.pullRequest.number}
                       </a>
                     ) : (
                       branch.name !== defaultBranch && (
@@ -566,8 +567,8 @@ type BranchActionsMenuProps = Readonly<{
   defaultBranch: string;
 }>
 
-const BranchActionsMenu = memo<BranchActionsMenuProps>(
-  ({ branch, repository, defaultBranch }) => {
+const BranchActionsMenu = memo(
+  ({ branch, repository, defaultBranch }: BranchActionsMenuProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { refs, floatingStyles, context } = useFloating({

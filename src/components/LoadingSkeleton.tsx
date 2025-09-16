@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import './LoadingSkeleton.css';
 
 const BranchSkeleton = memo(() => (
     <tr className={"branch-row"}>
@@ -29,12 +30,12 @@ const BranchSkeleton = memo(() => (
 
 BranchSkeleton.displayName = 'BranchSkeleton';
 
-type Props = Readonly<{
+type BranchesLoadingSkeletonProps = Readonly<{
   count?: number;
 }>
 
-const BranchesLoadingSkeleton = memo<Props>(
-  ({ count = 3 }) => (
+const BranchesLoadingSkeleton = memo(
+  ({ count = 3 }: BranchesLoadingSkeletonProps) => (
       <div className={"github-branches"}>
         <div className={"github-header"}>
           <span className={"github-section-title skeleton-title"} />

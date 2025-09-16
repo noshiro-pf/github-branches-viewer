@@ -4,13 +4,14 @@ import { toHtml } from 'hast-util-to-html';
 import { memo, useCallback, useEffect, useState } from 'react';
 import  { type Repository } from '../types';
 import { fetchReadmeAsHtml } from '../utils/api';
+import './ReadmeSectionBody.css';
 
 type Props = Readonly<{
   repository: Repository;
   onRefresh?: () => void;
 }>
 
-const ReadmeSectionBody = memo<Props>(({ repository, onRefresh }) => {
+const ReadmeSectionBody = memo(({ repository, onRefresh }: Props) => {
   // Check if we're in dark mode
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (globalThis.window !== undefined) {

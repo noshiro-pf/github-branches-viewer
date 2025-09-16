@@ -2,12 +2,13 @@ import { memo, useCallback } from 'react';
 import  { type Repository } from '../types';
 import GitHubBranches from './GitHubBranches';
 import ReadmeSectionBody from './ReadmeSectionBody';
+import './RepositoryViewer.css';
 
-type Props = Readonly<{
+type RepositoryViewerProps = Readonly<{
   repository: Repository;
 }>
 
-const RepositoryViewer = memo<Props>(({ repository }) => {
+const RepositoryViewer = memo(({ repository }: RepositoryViewerProps) => {
   const handleGitHubRefresh = useCallback(() => {
     console.log('GitHub data refreshed');
   }, []);
