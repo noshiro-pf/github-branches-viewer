@@ -23,7 +23,7 @@ import {
 } from '../utils/api';
 import CheckStatus from './CheckStatus';
 import './GitHubBranches.css';
-import BranchesLoadingSkeleton from './LoadingSkeleton';
+import './LoadingSkeleton.css';
 
 type GitHubBranchesProps = Readonly<{
   repository: Repository;
@@ -345,10 +345,6 @@ const GitHubBranches = memo(
       return `${Math.floor(diffDays / 365)} years ago`;
     }, []);
 
-    if (loading) {
-      return <BranchesLoadingSkeleton />;
-    }
-
     if (error) {
       return (
         <div className={"branches-error"}>
@@ -406,14 +402,50 @@ const GitHubBranches = memo(
             <thead>
               <tr className={"branches-header-row"}>
                 <td className={"branch-count-cell"} colSpan={6}>
-                  {branches.length} {"branches"}
-                  {hasNextPage ? ` (showing page ${currentPage})` : null}
+                  {loading ? (
+                    <span className={"skeleton-count"} />
+                  ) : (
+                    <>
+                      {branches.length} {"branches"}
+                      {hasNextPage ? ` (showing page ${currentPage})` : null}
+                    </>
+                  )}
                 </td>
               </tr>
             </thead>
             <tbody>
-              {branches.map((branch) => (
-                <tr key={branch.name} className={"branch-row"}>
+              {loading ? (
+                <>
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <tr key={`skeleton-${i}`} className={"branch-row"}>
+                      <td className={"branch-name-col"}>
+                        <div className={"branch-name-wrapper"}>
+                          <div className={"skeleton-branch-name"} />
+                          <div className={"skeleton-icon"} />
+                          <div className={"skeleton-badge"} />
+                        </div>
+                      </td>
+                      <td className={"branch-updated-col"}>
+                        <div className={"skeleton-date"} />
+                      </td>
+                      <td className={"branch-status-col"}>
+                        <div className={"skeleton-icon"} />
+                      </td>
+                      <td className={"branch-ahead-behind-col"}>
+                        <div className={"skeleton-stats"} />
+                      </td>
+                      <td className={"branch-pr-col"}>
+                        <div className={"skeleton-pr"} />
+                      </td>
+                      <td className={"branch-actions-col"}>
+                        <div className={"skeleton-icon"} />
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              ) :
+                branches.map((branch) => (
+                  <tr key={branch.name} className={"branch-row"}>
                   <td className={"branch-name-col"}>
                     <div className={"branch-name-wrapper"}>
                       <a
@@ -488,7 +520,7 @@ const GitHubBranches = memo(
                   </td>
 
                   <td className={"branch-pr-col"}>
-                    {branch.pullRequest !== null ? (
+                    {branch.pullRequest ? (
                       <a
                         className={"pr-link-inline"}
                         href={branch.pullRequest.html_url}
