@@ -78,6 +78,11 @@ const buildRepositoriesList = (): Repository[] => {
       owner: 'noshiro-pf',
     },
     {
+      id: 'octokit-safe-types',
+      name: 'octokit-safe-types',
+      owner: 'noshiro-pf',
+    },
+    {
       id: 'mono',
       name: 'mono',
       owner: 'noshiro-pf',
