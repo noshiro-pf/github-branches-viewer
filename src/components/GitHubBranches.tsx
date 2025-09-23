@@ -379,12 +379,16 @@ const GitHubBranches = memo(
               {"GitHub Branches"}
             </a>
             <a
-              className={"github-settings-link"}
+              aria-label={"Open repository settings"}
+              className={"github-settings-button"}
               href={`https://github.com/${repository.owner}/${repository.name}/settings`}
               rel={"noopener noreferrer"}
               target={"_blank"}
+              title={"Repository settings"}
             >
-              {"Settings"}
+              <svg fill={"currentColor"} height={"16"} viewBox={"0 0 16 16"} width={"16"}>
+                <path d={"M8 1.5a1.5 1.5 0 011.327.83l.1.2a5.88 5.88 0 011.466.85l.223-.129a1.5 1.5 0 111.5 2.598l-.223.129a5.84 5.84 0 010 1.702l.223.129a1.5 1.5 0 11-1.5 2.598l-.223-.129a5.88 5.88 0 01-1.466.85l-.1.2a1.5 1.5 0 11-2.654 0l-.1-.2a5.88 5.88 0 01-1.466-.85l-.223.129a1.5 1.5 0 11-1.5-2.598l.223-.129a5.84 5.84 0 010-1.702l-.223-.129a1.5 1.5 0 111.5-2.598l.223.129a5.88 5.88 0 011.466-.85l.1-.2A1.5 1.5 0 018 1.5zm0 3a2.5 2.5 0 102.5 2.5A2.5 2.5 0 008 4.5z"} />
+              </svg>
             </a>
           </div>
           <button

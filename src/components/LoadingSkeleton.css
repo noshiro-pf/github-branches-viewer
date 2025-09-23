@@ -79,11 +79,13 @@
   display: inline-block;
 }
 
-.skeleton-link {
-  width: 70px;
-  height: 16px;
-  border-radius: 3px;
-  display: inline-block;
+.skeleton-icon-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .skeleton-button-small {
@@ -116,7 +118,7 @@
 .skeleton-pr,
 .skeleton-button,
 .skeleton-title,
-.skeleton-link,
+.skeleton-icon-button,
 .skeleton-button-small {
   background: linear-gradient(90deg, #f6f8fa 25%, #e1e4e8 50%, #f6f8fa 75%);
   background-size: 200px 100%;
@@ -133,7 +135,7 @@
 .dark .skeleton-pr,
 .dark .skeleton-button,
 .dark .skeleton-title,
-.dark .skeleton-link,
+.dark .skeleton-icon-button,
 .dark .skeleton-button-small {
   background: linear-gradient(90deg, #21262d 25%, #30363d 50%, #21262d 75%);
   background-size: 200px 100%;

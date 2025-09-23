@@ -40,7 +40,7 @@ const BranchesLoadingSkeleton = memo(
         <div className={"github-header"}>
           <div className={"github-section-links"}>
             <span className={"github-section-title skeleton-title"} />
-            <span className={"github-settings-link skeleton-link"} />
+            <span className={"github-settings-button skeleton-icon-button"} />
           </div>
           <div className={"skeleton-button-small"} />
         </div>
