@@ -369,14 +369,24 @@ const GitHubBranches = memo(
     return (
       <div className={"github-branches"}>
         <div className={"github-header"}>
-          <a
-            className={"github-section-title"}
-            href={`https://github.com/${repository.owner}/${repository.name}/branches/all`}
-            rel={"noopener noreferrer"}
-            target={"_blank"}
-          >
-            {"GitHub Branches"}
-          </a>
+          <div className={"github-section-links"}>
+            <a
+              className={"github-section-title"}
+              href={`https://github.com/${repository.owner}/${repository.name}/branches/all`}
+              rel={"noopener noreferrer"}
+              target={"_blank"}
+            >
+              {"GitHub Branches"}
+            </a>
+            <a
+              className={"github-settings-link"}
+              href={`https://github.com/${repository.owner}/${repository.name}/settings`}
+              rel={"noopener noreferrer"}
+              target={"_blank"}
+            >
+              {"Settings"}
+            </a>
+          </div>
           <button
             className={"refresh-btn"}
             disabled={refreshing}

@@ -27,6 +27,13 @@
   z-index: var(--z-index-content-header);
 }
 
+.github-section-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .github-section-title {
   color: var(--color-text-link);
   transition: all 0.2s ease;
@@ -41,6 +48,18 @@
   color: var(--color-text-link-hover);
   text-decoration: underline;
   text-decoration-thickness: 2px;
+}
+
+.github-settings-link {
+  color: var(--color-text-link);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.github-settings-link:hover {
+  color: var(--color-text-link-hover);
+  text-decoration: underline;
 }
 
 /* Table Header Row */
@@ -433,6 +452,14 @@
 }
 
 .dark .github-section-title:hover {
+  color: #539bf5;
+}
+
+.dark .github-settings-link {
+  color: var(--color-text-link);
+}
+
+.dark .github-settings-link:hover {
   color: #539bf5;
 }
 
