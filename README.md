@@ -37,7 +37,7 @@ A React-based web application that displays GitHub repository branches, pull req
 2. Install dependencies:
 
     ```bash
-    npm install
+    pnpm install
     ```
 
 3. Create environment file:
@@ -58,19 +58,23 @@ A React-based web application that displays GitHub repository branches, pull req
 
 5. Start development server:
     ```bash
-    npm run dev
+    pnpm run dev
     ```
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run check` - Run type checking and linting
-- `npm run lint` - Run ESLint
-- `npm run fmt` - Format code with Prettier
-- `npm run test:visual` - Run Playwright visual tests
-- `npm run tsc` - Type check without emitting
+- `pnpm run dev` - Start development server
+- `pnpm run build` - Build for production
+- `pnpm run preview` - Preview production build
+- `pnpm run check` - Run type checking and linting
+- `pnpm run lint` - Run ESLint
+- `pnpm run fmt` - Format code with Prettier
+- `pnpm run test:visual` - Run Playwright visual tests
+- `pnpm run tsc` - Type check without emitting
+
+## Deployment
+
+Pushes to the `main` branch automatically build and deploy the site to GitHub Pages via the workflow in `.github/workflows/deploy.yml`. The build step sets `GITHUB_PAGES=true` so Vite outputs assets scoped to the repository path. To verify the production output locally, run `GITHUB_PAGES=true pnpm run build` followed by `pnpm run preview`.
 
 ## Configuration
 

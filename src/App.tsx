@@ -9,7 +9,8 @@ import { type Repository } from './types';
 const parseAdditionalRepos = (): Repository[] => {
   // Look for VITE_ADDITIONAL_REPOS environment variable
   // Format: "owner/repo1,owner/repo2,owner/repo3"
-  const additionalReposEnv = import.meta.env['VITE_ADDITIONAL_REPOS'];
+  const additionalReposEnv: string =
+    import.meta.env.VITE_ADDITIONAL_REPOS ?? '';
 
   if (additionalReposEnv) {
     return additionalReposEnv
@@ -26,7 +27,7 @@ const parseAdditionalRepos = (): Repository[] => {
       .map(({ owner, repoName }) => ({
         id: `${owner}-${repoName}`,
         name: repoName,
-        owner: owner.trim(),
+        owner: owner?.trim() ?? '',
       }));
   }
 

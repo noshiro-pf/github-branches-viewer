@@ -35,12 +35,12 @@ wait_for_server() {
 # Check if we should start dev server
 if ! check_dev_server; then
     echo "🚀 Starting dev server..."
-    npm run dev &
+    pnpm run dev &
     DEV_SERVER_PID=$!
-    
+
     # Clean up on exit
     trap "kill $DEV_SERVER_PID 2>/dev/null || true" EXIT
-    
+
     wait_for_server
 fi
 
@@ -49,7 +49,7 @@ echo "📸 Creating visual test baselines..."
 echo ""
 
 # Create baseline snapshots
-if npm run test:visual:update; then
+if pnpm run test:visual:update; then
     echo ""
     echo "✅ Visual test baselines created successfully!"
     echo ""
@@ -58,7 +58,7 @@ if npm run test:visual:update; then
     echo "Next steps:"
     echo "1. Review the generated snapshots"
     echo "2. Commit the snapshots to version control"
-    echo "3. Run 'npm run test:visual' to verify tests pass"
+    echo "3. Run 'pnpm run test:visual' to verify tests pass"
 else
     echo ""
     echo "❌ Failed to create visual baselines"

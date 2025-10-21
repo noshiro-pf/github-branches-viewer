@@ -9,41 +9,44 @@ const checkAll = async (): Promise<void> => {
 
   // Step 1: Install dependencies
   echo('1. Installing dependencies...');
-  await runCmdStep('npm i', 'Failed to install dependencies');
+  await runCmdStep('pnpm i', 'Failed to install dependencies');
   echo('✓ Dependencies installed\n');
 
   // Step 2: Spell check
   echo('2. Running spell check...');
-  await runCmdStep('npm run cspell -- --fail-fast', 'Spell check failed');
+  await runCmdStep('pnpm run cspell --fail-fast', 'Spell check failed');
   echo('✓ Spell check passed\n');
 
   // Step 3: Check file extensions
   echo('3. Checking file extensions...');
-  await runCmdStep('npm run check:ext', 'Checking file extensions failed');
+  await runCmdStep('pnpm run check:ext', 'Checking file extensions failed');
   echo('✓ File extensions validated\n');
 
   // Step 4: Run tests
   echo('4. Running tests...');
-  await runCmdStep('npm run test', 'Tests failed');
+  await runCmdStep('pnpm run test', 'Tests failed');
   echo('✓ Tests passed\n');
 
   // Step 5: Lint and check repo status
   echo('5. Running lint fixes...');
-  await runCmdStep('npm run lint', 'Linting failed');
+  await runCmdStep('pnpm run lint', 'Linting failed');
   echo('✓ Lint fixes applied\n');
 
   // Step 6: Build and check repo status
   echo('6. Building project...');
-  await runCmdStep('npm run build', 'Build failed');
+  await runCmdStep('pnpm run build', 'Build failed');
 
   // Step 8: Type check samples
   echo('8. Type checking samples...');
-  await runCmdStep('npm run type-check:samples', 'Sample type checking failed');
+  await runCmdStep(
+    'pnpm run type-check:samples',
+    'Sample type checking failed',
+  );
   echo('✓ Sample type checking passed\n');
 
   // Step 11: Format and check repo status
   echo('11. Formatting code...');
-  await runCmdStep('npm run fmt', 'Formatting failed');
+  await runCmdStep('pnpm run fmt', 'Formatting failed');
 
   echo('✅ All checks completed successfully!\n');
 };
