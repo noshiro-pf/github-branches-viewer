@@ -2,16 +2,16 @@ import { createStarryNight } from '@wooorm/starry-night';
 import 'github-markdown-css/github-markdown.css';
 import { toHtml } from 'hast-util-to-html';
 import { memo, useCallback, useEffect, useState } from 'react';
-import  { type Repository } from '../types';
+import { type Repository } from '../types';
 import { fetchReadmeAsHtml } from '../utils/api';
-import './ReadmeSectionBody.css';
+import './readme-section-body.css';
 
 type Props = Readonly<{
   repository: Repository;
   onRefresh?: () => void;
 }>
 
-const ReadmeSectionBody = memo(({ repository, onRefresh }: Props) => {
+export const ReadmeSectionBody = memo(({ repository, onRefresh }: Props) => {
   // Check if we're in dark mode
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (globalThis.window !== undefined) {
@@ -280,5 +280,3 @@ const ReadmeSectionBody = memo(({ repository, onRefresh }: Props) => {
 });
 
 ReadmeSectionBody.displayName = 'ReadmeSectionBody';
-
-export default ReadmeSectionBody;

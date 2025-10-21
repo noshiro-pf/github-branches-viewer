@@ -1,4 +1,6 @@
 .rate-limit-status {
+  --rate-limit-total: 1;
+  --rate-limit-remaining: 0;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -81,6 +83,7 @@
   height: 100%;
   background-color: #28a745;
   transition: width 0.3s ease;
+  width: calc((var(--rate-limit-remaining) / var(--rate-limit-total)) * 100%);
 }
 
 .reset-time {

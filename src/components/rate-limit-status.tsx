@@ -1,58 +1,62 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { type RateLimit } from '../types';
-import { checkRateLimit } from '../utils/api';
-import './RateLimitStatus.css';
+import { checkRateLimit } from '../utils';
+import './rate-limit-status.css';
 
-const RateLimitStatus = memo(() => {
+export const RateLimitStatus = memo(() => {
   const [rateLimit, setRateLimit] = useState<RateLimit | null>(null);
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const isMountedRef = useRef(true);
 
-  const loadRateLimit = useCallback(async () => {
-    const limit = await checkRateLimit();
-    if (limit !== null) {
+  const toggleDetails = useCallback(() => {
+    setShowDetails((previous) => !previous);
+  }, []);
+
+  useEffect(() => {
+    const fetchRateLimit = async (): Promise<void> => {
+      const limit = await checkRateLimit();
+      if (!isMountedRef.current || limit === null) {
+        return;
+      }
       setRateLimit(limit);
-      // Show warning if rate limit is low
       if (limit.remaining < 10) {
         setShowDetails(true);
       }
-    }
-  }, []);
+    };
 
-  const toggleDetails = useCallback(() => {
-    setShowDetails(!showDetails);
-  }, [showDetails]);
-
-  useEffect(() => {
-    let mut_interval: NodeJS.Timeout | undefined = undefined;
-
-    (async () => {
-      await loadRateLimit();
-      // Check rate limit every 30 seconds
-      mut_interval = setInterval(() => {
-        loadRateLimit().catch(() => {});
-      }, 30_000);
-    })().catch(() => {});
+    fetchRateLimit().catch(() => {});
+    const intervalId = globalThis.setInterval(() => {
+      fetchRateLimit().catch(() => {});
+    }, 30_000);
 
     return () => {
-      clearInterval(mut_interval);
+      isMountedRef.current = false;
+      globalThis.clearInterval(intervalId);
     };
-  }, [loadRateLimit]);
+  }, []);
 
-  if (rateLimit === null) return null;
+  if (rateLimit === null) {
+    return null;
+  }
 
   const resetTime = new Date(rateLimit.reset * 1000);
-  const percentage = (rateLimit.remaining / rateLimit.limit) * 100;
+  const normalizedLimit = Math.max(rateLimit.limit, 1);
+  const isLow = rateLimit.limit !== 0 && rateLimit.remaining * 5 < rateLimit.limit;
+  const progressStyle = {
+    '--rate-limit-remaining': rateLimit.remaining,
+    '--rate-limit-total': normalizedLimit,
+  } as const;
 
   return (
     <div className={'rate-limit-status'}>
       <button
-        type={'button'}
         className={'rate-limit-toggle'}
         title={'GitHub API Rate Limit'}
+        type={'button'}
         onClick={toggleDetails}
       >
         <span
-          className={`rate-indicator ${percentage < 20 ? 'low' : 'normal'}`}
+          className={`rate-indicator ${isLow ? 'low' : 'normal'}`}
         >
           {rateLimit.remaining}
           {'/'}
@@ -67,7 +71,7 @@ const RateLimitStatus = memo(() => {
             <div className={'rate-bar'}>
               <div
                 className={'rate-bar-fill'}
-                style={{ width: `${percentage}%` }}
+                style={progressStyle}
               />
             </div>
             <p>
@@ -78,7 +82,7 @@ const RateLimitStatus = memo(() => {
               {'Resets at '}
               {resetTime.toLocaleTimeString()}
             </p>
-            {percentage < 20 ? (
+            {isLow ? (
               <div className={'rate-warning'}>
                 {
                   '⚠️ Rate limit is low. Consider adding a GitHub token to increase'
@@ -96,5 +100,3 @@ const RateLimitStatus = memo(() => {
 });
 
 RateLimitStatus.displayName = 'RateLimitStatus';
-
-export default RateLimitStatus;

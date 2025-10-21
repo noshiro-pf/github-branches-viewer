@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 
 - `src/` – React + TypeScript source.
-    - `components/`, `utils/`, `types/`, `styles/`, `App.tsx`
+    - `components/`, `utils/`, `types/`, `styles/`, `app.tsx`
 - `public/` – Static assets served by Vite.
 - `configs/` – Tooling configs (Vitest, TS).
 - `scripts/` – Maintenance and helper scripts.
@@ -32,7 +32,7 @@ Examples:
 - Prettier: 2-space indent, LF EOL, single quotes, semicolons.
 - ESLint: `eslint-config-typed` for TS/React/Vitest.
 - Exports: prefer named exports; avoid default exports except in `configs/` and `scripts/` where allowed.
-- Filenames: TypeScript/React use `camelCase` or `PascalCase` for components (e.g., `MyWidget.tsx`).
+- Filenames: use `kebab-case` for all project files (e.g., `my-widget.tsx`), matching import paths.
 
 ## Testing Guidelines
 

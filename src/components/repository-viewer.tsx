@@ -1,14 +1,15 @@
 import { memo, useCallback } from 'react';
-import  { type Repository } from '../types';
-import GitHubBranches from './GitHubBranches';
-import ReadmeSectionBody from './ReadmeSectionBody';
-import './RepositoryViewer.css';
+import { type Repository } from '../types';
+import { GitHubBranches } from './github-branches';
+import { ReadmeSectionBody } from './readme-section-body';
+import './repository-viewer.css';
 
 type RepositoryViewerProps = Readonly<{
   repository: Repository;
 }>
 
-const RepositoryViewer = memo(({ repository }: RepositoryViewerProps) => {
+export const RepositoryViewer = memo<RepositoryViewerProps>((props) => {
+  const { repository } = props;
   const handleGitHubRefresh = useCallback(() => {
     console.log('GitHub data refreshed');
   }, []);
@@ -18,15 +19,15 @@ const RepositoryViewer = memo(({ repository }: RepositoryViewerProps) => {
   }, []);
 
   return (
-    <div className={"repository-viewer"}>
-      <section className={"github-section"} id={"github-branches"}>
+    <div className={'repository-viewer'}>
+      <section className={'github-section'} id={'github-branches'}>
         <GitHubBranches
           repository={repository}
           onRefresh={handleGitHubRefresh}
         />
       </section>
 
-      <section className={"readme-section"} id={"readme"}>
+      <section className={'readme-section'} id={'readme'}>
         <ReadmeSectionBody
           repository={repository}
           onRefresh={handleReadmeRefresh}
@@ -37,5 +38,3 @@ const RepositoryViewer = memo(({ repository }: RepositoryViewerProps) => {
 });
 
 RepositoryViewer.displayName = 'RepositoryViewer';
-
-export default RepositoryViewer;

@@ -1,48 +1,66 @@
-import { memo, useCallback, useEffect, useState } from 'react';
-import './App.css';
-import RateLimitStatus from './components/RateLimitStatus';
-import RepositoryViewer from './components/RepositoryViewer';
-import TableOfContents from './components/TableOfContents';
+import {
+  memo,
+  type MouseEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import './app.css';
+import {
+  RateLimitStatus,
+  RepositoryViewer,
+  TableOfContents,
+} from './components';
 import { type Repository } from './types';
+
+const FALLBACK_REPOSITORY: Repository = {
+  id: 'github-branches-viewer',
+  name: 'github-branches-viewer',
+  owner: 'noshiro-pf',
+};
+
+const APP_TITLE = 'GitHub Branches & README Viewer';
 
 // Parse additional repositories from environment variables
 const parseAdditionalRepos = (): Repository[] => {
   // Look for VITE_ADDITIONAL_REPOS environment variable
   // Format: "owner/repo1,owner/repo2,owner/repo3"
-  const additionalReposEnv: string =
-    import.meta.env.VITE_ADDITIONAL_REPOS ?? '';
-
-  if (additionalReposEnv) {
-    return additionalReposEnv
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean)
-      .map((repoString) => {
-        const [owner, repoName] = repoString.split('/');
-        return { owner, repoName };
-      })
-      .filter(
-        ({ owner, repoName }) => owner !== undefined && repoName !== undefined,
-      )
-      .map(({ owner, repoName }) => ({
-        id: `${owner}-${repoName}`,
-        name: repoName,
-        owner: owner?.trim() ?? '',
-      }));
+  const additionalReposEnv = import.meta.env.VITE_ADDITIONAL_REPOS;
+  if (typeof additionalReposEnv !== 'string' || additionalReposEnv.trim() === '') {
+    return [];
   }
 
-  return [];
+  return additionalReposEnv
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0)
+    .map((repoString) => {
+      const [ownerRaw, repoRaw] = repoString.split('/');
+      if (ownerRaw === undefined || repoRaw === undefined) {
+        return null;
+      }
+
+      const owner = ownerRaw.trim();
+      const repoName = repoRaw.trim();
+
+      if (owner === '' || repoName === '') {
+        return null;
+      }
+
+      return {
+        id: `${owner}-${repoName}`,
+        name: repoName,
+        owner,
+      };
+    })
+    .filter((repo): repo is Repository => repo !== null);
 };
 
 // Build complete repositories list
 const buildRepositoriesList = (): Repository[] => {
   // Default repositories (with github-branches-viewer first)
   const defaultRepos: Repository[] = [
-    {
-      id: 'github-branches-viewer',
-      name: 'github-branches-viewer',
-      owner: 'noshiro-pf',
-    },
+    FALLBACK_REPOSITORY,
     {
       id: 'typescript-monorepo-template',
       name: 'typescript-monorepo-template',
@@ -98,15 +116,21 @@ const buildRepositoriesList = (): Repository[] => {
 };
 
 const repositories = buildRepositoriesList();
+const fallbackRepository: Repository =
+  repositories[0] ?? FALLBACK_REPOSITORY;
 
 // Initialize tab from query parameter or default to first repository
 const getInitialTab = (): string => {
   const params = new URLSearchParams(globalThis.location.search);
   const tabFromUrl = params.get('tab');
-  const validTab = repositories.find((repo) => repo.id === tabFromUrl);
-  return validTab !== undefined
-    ? tabFromUrl
-    : (repositories[0]?.id ?? 'github-branches-viewer');
+  if (tabFromUrl !== null) {
+    const validTab = repositories.find((repo) => repo.id === tabFromUrl);
+    if (validTab !== undefined) {
+      return tabFromUrl;
+    }
+  }
+
+  return fallbackRepository.id;
 };
 
 // Initialize dark mode from query parameter, localStorage, or system preference
@@ -118,21 +142,29 @@ const getInitialDarkMode = (): boolean => {
   }
   const saved = localStorage.getItem('darkMode');
   if (saved !== null) {
-    const parsed = JSON.parse(saved);
-    return typeof parsed === 'boolean' ? parsed : false;
+    const parsed: unknown = JSON.parse(saved);
+    if (typeof parsed === 'boolean') {
+      return parsed;
+    }
+    return false;
   }
-  return (
-    globalThis.matchMedia &&
-    globalThis.matchMedia('(prefers-color-scheme: dark)').matches
-  );
+  if (typeof globalThis.matchMedia === 'function') {
+    return globalThis
+      .matchMedia('(prefers-color-scheme: dark)')
+      .matches;
+  }
+  return false;
 };
 
 // Initialize vertical layout from localStorage or default to false (horizontal)
 const getInitialVerticalLayout = (): boolean => {
   const saved = localStorage.getItem('verticalLayout');
   if (saved !== null) {
-    const parsed = JSON.parse(saved);
-    return typeof parsed === 'boolean' ? parsed : false;
+    const parsed: unknown = JSON.parse(saved);
+    if (typeof parsed === 'boolean') {
+      return parsed;
+    }
+    return false;
   }
   return false;
 };
@@ -177,16 +209,20 @@ export const App = memo(() => {
 
   // Listen to browser back/forward buttons
   useEffect(() => {
-    const handlePopState = () => {
+    const handlePopState = (): void => {
       const params = new URLSearchParams(globalThis.location.search);
 
       // Handle tab parameter
       const tabFromUrl = params.get('tab');
-      const validTab = repositories.find((repo) => repo.id === tabFromUrl);
-      if (validTab) {
-        setActiveTab(tabFromUrl);
+      if (tabFromUrl !== null) {
+        const validTab = repositories.find((repo) => repo.id === tabFromUrl);
+        if (validTab !== undefined) {
+          setActiveTab(tabFromUrl);
+        } else {
+          setActiveTab(fallbackRepository.id);
+        }
       } else {
-        setActiveTab(repositories[0]?.id ?? 'github-branches-viewer');
+        setActiveTab(fallbackRepository.id);
       }
 
       // Handle dark mode parameter
@@ -204,10 +240,33 @@ export const App = memo(() => {
     };
   }, []);
 
+  const activeRepository =
+    repositories.find((repo) => repo.id === activeTab) ?? fallbackRepository;
+  const repositoryViewer = (
+    <RepositoryViewer key={activeTab} repository={activeRepository} />
+  );
+
+  const handleTabLinkClick: MouseEventHandler<HTMLAnchorElement> = useCallback(
+    (mouseEvent) => {
+      if (mouseEvent.ctrlKey || mouseEvent.metaKey || mouseEvent.shiftKey) {
+        return;
+      }
+
+      const { repoId } = mouseEvent.currentTarget.dataset;
+      if (repoId === undefined) {
+        return;
+      }
+
+      mouseEvent.preventDefault();
+      handleTabChange(repoId);
+    },
+    [handleTabChange],
+  );
+
   return (
     <div className={`app ${darkMode ? 'dark' : ''}`}>
       <header className={'app-header'}>
-        <h1>{'GitHub Branches & README Viewer'}</h1>
+        <h1>{APP_TITLE}</h1>
         <div className={'header-controls'}>
           <button
             aria-label={
@@ -221,7 +280,7 @@ export const App = memo(() => {
                 ? 'Switch to horizontal layout'
                 : 'Switch to vertical layout'
             }
-            type="button"
+            type={'button'}
             onClick={toggleVerticalLayout}
           >
             {verticalLayout ? (
@@ -260,7 +319,7 @@ export const App = memo(() => {
             }
             className={'dark-mode-toggle'}
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            type="button"
+            type={'button'}
             onClick={toggleDarkMode}
           >
             {darkMode ? (
@@ -301,14 +360,10 @@ export const App = memo(() => {
               <a
                 key={repo.id}
                 className={`sidebar-tab ${activeTab === repo.id ? 'active' : ''}`}
+                data-repo-id={repo.id}
                 href={`?tab=${repo.id}`}
                 title={repo.name}
-                onClick={(e) => {
-                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-                    e.preventDefault();
-                    handleTabChange(repo.id);
-                  }
-                }}
+                onClick={handleTabLinkClick}
               >
                 <span className={'sidebar-tab-text'}>{repo.name}</span>
               </a>
@@ -317,13 +372,7 @@ export const App = memo(() => {
 
           <main className={'main-content'}>
             <div className={'tab-content active'}>
-              <RepositoryViewer
-                key={activeTab}
-                repository={
-                  repositories.find((repo) => repo.id === activeTab) ??
-                  repositories[0]
-                }
-              />
+              {repositoryViewer}
             </div>
           </main>
         </div>
@@ -334,14 +383,10 @@ export const App = memo(() => {
               <a
                 key={repo.id}
                 className={`tab-button ${activeTab === repo.id ? 'active' : ''}`}
+                data-repo-id={repo.id}
                 href={`?tab=${repo.id}`}
                 title={repo.name}
-                onClick={(e) => {
-                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
-                    e.preventDefault();
-                    handleTabChange(repo.id);
-                  }
-                }}
+                onClick={handleTabLinkClick}
               >
                 <span className={'tab-button-text'}>{repo.name}</span>
               </a>
@@ -350,13 +395,7 @@ export const App = memo(() => {
 
           <main className={'main-content'}>
             <div className={'tab-content active'}>
-              <RepositoryViewer
-                key={activeTab}
-                repository={
-                  repositories.find((repo) => repo.id === activeTab) ??
-                  repositories[0]
-                }
-              />
+              {repositoryViewer}
             </div>
           </main>
         </>

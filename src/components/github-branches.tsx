@@ -10,7 +10,7 @@ import {
   useInteractions,
 } from '@floating-ui/react';
 import { memo, useCallback, useEffect, useState } from 'react';
-import  { type BranchInfo, type Repository } from '../types';
+import { type BranchInfo, type Repository } from '../types';
 import {
   clearRepositoryCache,
   fetchBranchChecks,
@@ -21,16 +21,15 @@ import {
   fetchPullRequests,
   fetchRepository,
 } from '../utils/api';
-import CheckStatus from './CheckStatus';
-import './GitHubBranches.css';
-import './LoadingSkeleton.css';
+import { CheckStatus } from './check-status';
+import './github-branches.css';
 
 type GitHubBranchesProps = Readonly<{
   repository: Repository;
   onRefresh?: () => void;
 }>
 
-const GitHubBranches = memo(
+export const GitHubBranches = memo(
   ({ repository, onRefresh }: GitHubBranchesProps) => {
     const [branches, setBranches] = useState<BranchInfo[]>([]);
     const [defaultBranch, setDefaultBranch] = useState<string>('main');
@@ -242,7 +241,7 @@ const GitHubBranches = memo(
                     // Build PR data
                     const prInfo = pullRequests?.length ? {
                       pullRequest: pullRequests[0], // Use the first PR if multiple exist
-                      pullRequests: pullRequests,
+                      pullRequests,
                     } : {
                       pullRequest: null,
                       pullRequests: [],
@@ -784,5 +783,3 @@ const BranchActionsMenu = memo(
 );
 
 BranchActionsMenu.displayName = 'BranchActionsMenu';
-
-export default GitHubBranches;

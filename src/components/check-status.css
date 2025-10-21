@@ -1,4 +1,7 @@
-/* Removed .check-status wrapper since we're using floating portal now */
+.check-status {
+  position: relative;
+  display: inline-block;
+}
 
 .check-summary {
   display: flex;
@@ -51,6 +54,9 @@
   max-width: 500px;
   z-index: 1000;
   opacity: 1;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
 }
 
 .check-details-header {
