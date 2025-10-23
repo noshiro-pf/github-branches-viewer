@@ -6,7 +6,7 @@ import './repository-viewer.css';
 
 type RepositoryViewerProps = Readonly<{
   repository: Repository;
-}>
+}>;
 
 export const RepositoryViewer = memo<RepositoryViewerProps>((props) => {
   const { repository } = props;

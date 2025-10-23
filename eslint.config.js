@@ -7,7 +7,9 @@ import {
 const thisDir = import.meta.dirname;
 
 export default [
-  { ignores: ['**/dist/**', '.vite/**', 'src/vite-env.d.ts', 'vite.config.js'] },
+  {
+    ignores: ['**/dist/**', '.vite/**', 'src/vite-env.d.ts', 'vite.config.js'],
+  },
   ...eslintFlatConfigForTypeScript({
     tsconfigRootDir: thisDir,
     tsconfigFileName: './tsconfig.json',

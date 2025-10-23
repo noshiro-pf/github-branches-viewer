@@ -26,7 +26,10 @@ const parseAdditionalRepos = (): Repository[] => {
   // Look for VITE_ADDITIONAL_REPOS environment variable
   // Format: "owner/repo1,owner/repo2,owner/repo3"
   const additionalReposEnv = import.meta.env.VITE_ADDITIONAL_REPOS;
-  if (typeof additionalReposEnv !== 'string' || additionalReposEnv.trim() === '') {
+  if (
+    typeof additionalReposEnv !== 'string' ||
+    additionalReposEnv.trim() === ''
+  ) {
     return [];
   }
 
@@ -116,8 +119,7 @@ const buildRepositoriesList = (): Repository[] => {
 };
 
 const repositories = buildRepositoriesList();
-const fallbackRepository: Repository =
-  repositories[0] ?? FALLBACK_REPOSITORY;
+const fallbackRepository: Repository = repositories[0] ?? FALLBACK_REPOSITORY;
 
 // Initialize tab from query parameter or default to first repository
 const getInitialTab = (): string => {
@@ -149,9 +151,7 @@ const getInitialDarkMode = (): boolean => {
     return false;
   }
   if (typeof globalThis.matchMedia === 'function') {
-    return globalThis
-      .matchMedia('(prefers-color-scheme: dark)')
-      .matches;
+    return globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
   }
   return false;
 };
@@ -371,9 +371,7 @@ export const App = memo(() => {
           </nav>
 
           <main className={'main-content'}>
-            <div className={'tab-content active'}>
-              {repositoryViewer}
-            </div>
+            <div className={'tab-content active'}>{repositoryViewer}</div>
           </main>
         </div>
       ) : (
@@ -394,9 +392,7 @@ export const App = memo(() => {
           </nav>
 
           <main className={'main-content'}>
-            <div className={'tab-content active'}>
-              {repositoryViewer}
-            </div>
+            <div className={'tab-content active'}>{repositoryViewer}</div>
           </main>
         </>
       )}

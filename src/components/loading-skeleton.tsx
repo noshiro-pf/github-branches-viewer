@@ -2,37 +2,37 @@ import { memo, useMemo } from 'react';
 import './loading-skeleton.css';
 
 const BranchSkeleton = memo(() => (
-    <tr className={"branch-row"}>
-      <td className={"branch-name-col"}>
-        <div className={"branch-name-wrapper"}>
-          <div className={"skeleton-branch-name"} />
-          <div className={"skeleton-icon"} />
-          <div className={"skeleton-badge"} />
-        </div>
-      </td>
-      <td className={"branch-updated-col"}>
-        <div className={"skeleton-date"} />
-      </td>
-      <td className={"branch-status-col"}>
-        <div className={"skeleton-icon"} />
-      </td>
-      <td className={"branch-ahead-behind-col"}>
-        <div className={"skeleton-stats"} />
-      </td>
-      <td className={"branch-pr-col"}>
-        <div className={"skeleton-pr"} />
-      </td>
-      <td className={"branch-actions-col"}>
-        <div className={"skeleton-icon"} />
-      </td>
-    </tr>
-  ));
+  <tr className={'branch-row'}>
+    <td className={'branch-name-col'}>
+      <div className={'branch-name-wrapper'}>
+        <div className={'skeleton-branch-name'} />
+        <div className={'skeleton-icon'} />
+        <div className={'skeleton-badge'} />
+      </div>
+    </td>
+    <td className={'branch-updated-col'}>
+      <div className={'skeleton-date'} />
+    </td>
+    <td className={'branch-status-col'}>
+      <div className={'skeleton-icon'} />
+    </td>
+    <td className={'branch-ahead-behind-col'}>
+      <div className={'skeleton-stats'} />
+    </td>
+    <td className={'branch-pr-col'}>
+      <div className={'skeleton-pr'} />
+    </td>
+    <td className={'branch-actions-col'}>
+      <div className={'skeleton-icon'} />
+    </td>
+  </tr>
+));
 
 BranchSkeleton.displayName = 'BranchSkeleton';
 
 type BranchesLoadingSkeletonProps = Readonly<{
   count?: number;
-}>
+}>;
 
 export const BranchesLoadingSkeleton = memo(
   ({ count = 3 }: BranchesLoadingSkeletonProps) => {

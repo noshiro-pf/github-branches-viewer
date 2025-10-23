@@ -3,7 +3,7 @@ export type Repository = {
   id: string;
   name: string;
   owner: string;
-}
+};
 
 // GitHub API types
 export type GitHubRepository = {
@@ -15,7 +15,7 @@ export type GitHubRepository = {
   description?: string;
   homepage?: string;
   html_url: string;
-}
+};
 
 export type GitHubBranch = {
   name: string;
@@ -24,7 +24,7 @@ export type GitHubBranch = {
     sha: string;
     url: string;
   };
-}
+};
 
 export type GitHubCommit = {
   sha: string;
@@ -40,7 +40,7 @@ export type GitHubCommit = {
     login: string;
     avatar_url: string;
   };
-}
+};
 
 export type GitHubCheckRun = {
   id: number;
@@ -63,7 +63,7 @@ export type GitHubCheckRun = {
     title: string;
     summary: string;
   };
-}
+};
 
 export type GitHubCheckSuites = {
   total_count: number;
@@ -80,7 +80,7 @@ export type GitHubCheckSuites = {
       | 'action_required'
       | null;
   }[];
-}
+};
 
 export type GitHubPullRequest = {
   number: number;
@@ -92,7 +92,7 @@ export type GitHubPullRequest = {
   user: {
     login: string;
   };
-}
+};
 
 export type BranchInfo = {
   name: string;
@@ -123,7 +123,7 @@ export type BranchInfo = {
   } | null;
   pullRequests?: GitHubPullRequest[];
   pullRequest?: GitHubPullRequest | null;
-}
+};
 
 // Rate limit types
 export type RateLimit = {
@@ -131,7 +131,7 @@ export type RateLimit = {
   remaining: number;
   reset: number;
   used: number;
-}
+};
 
 export type RateLimitResponse = {
   resources: {
@@ -139,10 +139,10 @@ export type RateLimitResponse = {
     search: RateLimit;
     graphql: RateLimit;
   };
-}
+};
 
 // Cache types
 export type CacheEntry<T = unknown> = {
   data: T;
   timestamp: number;
-}
+};

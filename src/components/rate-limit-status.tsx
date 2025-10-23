@@ -41,7 +41,8 @@ export const RateLimitStatus = memo(() => {
 
   const resetTime = new Date(rateLimit.reset * 1000);
   const normalizedLimit = Math.max(rateLimit.limit, 1);
-  const isLow = rateLimit.limit !== 0 && rateLimit.remaining * 5 < rateLimit.limit;
+  const isLow =
+    rateLimit.limit !== 0 && rateLimit.remaining * 5 < rateLimit.limit;
   const progressStyle = {
     '--rate-limit-remaining': rateLimit.remaining,
     '--rate-limit-total': normalizedLimit,
@@ -55,9 +56,7 @@ export const RateLimitStatus = memo(() => {
         type={'button'}
         onClick={toggleDetails}
       >
-        <span
-          className={`rate-indicator ${isLow ? 'low' : 'normal'}`}
-        >
+        <span className={`rate-indicator ${isLow ? 'low' : 'normal'}`}>
           {rateLimit.remaining}
           {'/'}
           {rateLimit.limit}
@@ -69,10 +68,7 @@ export const RateLimitStatus = memo(() => {
           <h3>{'GitHub API Rate Limit'}</h3>
           <div className={'rate-info'}>
             <div className={'rate-bar'}>
-              <div
-                className={'rate-bar-fill'}
-                style={progressStyle}
-              />
+              <div className={'rate-bar-fill'} style={progressStyle} />
             </div>
             <p>
               <strong>{rateLimit.remaining}</strong>
