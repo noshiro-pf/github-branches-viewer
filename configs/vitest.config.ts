@@ -17,7 +17,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['html', 'lcov', 'text'],
-      include: ['src/**'],
+      include: ['src/**/*.{mts,tsx}'],
       exclude: ['**/index.mts'],
     },
   },
