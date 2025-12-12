@@ -7,8 +7,8 @@
   "scripts": {
     "build": "vite build",
     "check": "pnpm run type-check && pnpm run lint",
-    "check-all": "tsx ./scripts/cmd/check-all.mjs",
-    "check:ext": "tsx ./scripts/cmd/check-ext.mjs",
+    "check-all": "tsx ./scripts/cmd/check-all.mts",
+    "check:ext": "tsx ./scripts/cmd/check-ext.mts",
     "dev": "vite",
     "fmt": "format-diff-from origin/main",
     "fmt:full": "prettier --write .",
